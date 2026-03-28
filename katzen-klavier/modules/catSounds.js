@@ -8,7 +8,18 @@ const BASE_FREQ = noteToFrequency(BASE_NOTE); // 440 Hz
 
 let audioCtx = null;
 let meowBuffer = null;
+let meowStartOffset = 0;
 let loadPromise = null;
+
+function findStartOffset(audioBuffer, threshold = 0.02) {
+  const channel = audioBuffer.getChannelData(0);
+  for (let i = 0; i < channel.length; i++) {
+    if (Math.abs(channel[i]) > threshold) {
+      return i / audioBuffer.sampleRate;
+    }
+  }
+  return 0;
+}
 
 function getCtx() {
   if (!audioCtx) audioCtx = new AudioContext();
@@ -25,6 +36,7 @@ export async function preloadCatSound() {
     if (!res.ok) throw new Error(`Cat sound API error: ${res.status}`);
     const arrayBuffer = await res.arrayBuffer();
     meowBuffer = await getCtx().decodeAudioData(arrayBuffer);
+    meowStartOffset = findStartOffset(meowBuffer);
   })();
 
   return loadPromise;
@@ -52,7 +64,7 @@ export function playCatNote(note) {
 
   source.connect(gain);
   gain.connect(ctx.destination);
-  source.start(ctx.currentTime);
+  source.start(ctx.currentTime, meowStartOffset);
 
   activeSources.set(note, { source, gain });
 
