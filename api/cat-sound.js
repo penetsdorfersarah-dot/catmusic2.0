@@ -15,9 +15,9 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        text: 'cat meow, sharp attack, staccato, no silence at start, crisp and immediate',
-        duration_seconds: 0.5,
-        prompt_influence: 0.9,
+        text: 'single cat meow, meow sound starts immediately at zero seconds, no leading silence, no breath, no buildup, direct onset, short duration',
+        duration_seconds: 0.8,
+        prompt_influence: 1.0,
       }),
     });
 

@@ -1,5 +1,4 @@
-// Fetches one cat meow from ElevenLabs (via /api/cat-sound),
-// decodes it, and pitch-shifts it per note using Web Audio playbackRate.
+// Loads a local cat meow WAV file and pitch-shifts it per note using Web Audio playbackRate.
 
 import { noteToFrequency } from './pitchUtils.js';
 
@@ -32,8 +31,8 @@ export async function preloadCatSound() {
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
-    const res = await fetch('/api/cat-sound');
-    if (!res.ok) throw new Error(`Cat sound API error: ${res.status}`);
+    const res = await fetch('/assets/sounds/meow.wav');
+    if (!res.ok) throw new Error(`Meow sound not found: ${res.status}`);
     const arrayBuffer = await res.arrayBuffer();
     meowBuffer = await getCtx().decodeAudioData(arrayBuffer);
     meowStartOffset = findStartOffset(meowBuffer);
