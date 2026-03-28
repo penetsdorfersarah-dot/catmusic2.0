@@ -1,8 +1,14 @@
 import { KEY_TO_NOTE } from './modules/keyboardMap.js';
 import { buildPiano, triggerDown, triggerUp } from './modules/piano.js';
+import { preloadCatSound } from './modules/catSounds.js';
 
 const pianoContainer = document.getElementById('piano');
 buildPiano(pianoContainer);
+
+const status = document.getElementById('status');
+preloadCatSound()
+  .then(() => { status.textContent = 'Katze bereit! Spiel los.'; })
+  .catch(() => { status.textContent = 'Synth-Modus (kein API Key)'; });
 
 const heldKeys = new Set();
 
